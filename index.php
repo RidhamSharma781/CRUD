@@ -53,7 +53,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">New User</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Update Data</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -73,10 +73,10 @@
                         <label for="updatecity" class="form-label">City</label>
                         <input type="text" class="form-control" id="updatecity">
                     </div>
-                    <input type="hidden" id="hiddenData" >
+                    <input type="text" id="hiddenData" hidden >
                 </div>
                 <div class="modal-footer">
-                    <button type="button" onclick="addUser()" class="btn btn-dark">Submit</button>
+                    <button type="button" onclick="updateUser()" class="btn btn-dark">Update</button>
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -106,7 +106,7 @@
 
         // To display data everytime.
 
-        $(Document).ready(() => {
+        $(new Document).ready(function(){
             displayData();
         })
 
@@ -158,6 +158,7 @@
                 },
                 success: function (data, status) {
                     // console.log("Success!");
+                    $('#completeModal').modal("hide");
                     displayData();
                 }
             })
@@ -169,7 +170,7 @@
             $('#hiddenData').val(id);
 
             // To show the Modal on clicking Update button
-            $('#updateModal').modal("show");
+            // $('#updateModal').modal("show");
 
             // Post request for updating data
             $.post("update.php",{updateSend:id},function(data,success){
@@ -179,6 +180,29 @@
                 $('#updatephone').val(userId.phone);
                 $('#updatecity').val(userId.city);
             });
+        }
+
+        // Function to update the data 
+
+        function updateUser(){
+           var name = $('#updatename').val();
+           var email = $('#updateemail').val();
+           var phone = $('#updatephone').val();
+           var city = $('#updatecity').val();
+           var hiddenId = $('#hiddenData').val();
+
+           $.post('update.php',{
+            updateName:name,
+            updateEmail:email,
+            updatePhone:phone,
+            updateCity:city,
+            updateId:hiddenId
+           },
+           function(data,status){
+            displayData(),
+            $('#updateModal').modal('hide');
+           }
+        );
 
         }
     </script>

@@ -31,7 +31,7 @@ if (isset($_POST['displaySend'])) {
         <td>@' . $phone . '</td>
         <td>@' . $city . '</td>
         <td>
-    <button onclick="getUser('.$id.')" class="btn btn-dark">Update</button>
+    <button data-bs-toggle="modal" data-bs-target="#updateModal" onclick="getUser('.$id.')" class="btn btn-dark">Update</button>
     <button onclick="deleteUser('.$id.')" class="btn btn-danger">Delete</button>
 </td>
       </tr>';
