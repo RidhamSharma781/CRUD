@@ -17,6 +17,7 @@ if (isset($_POST['displaySend'])) {
     </tr>
   </thead>';
     $result = mysqli_query($con, $sql);
+    $num = 1;
     while ($row = mysqli_fetch_assoc($result)) {
         $id = $row['id'];
         $name = $row['name'];
@@ -24,16 +25,17 @@ if (isset($_POST['displaySend'])) {
         $phone = $row['phone'];
         $city = $row['city'];
         $table .= '<tr>
-        <td scope="row">' . $id . '</td>
+        <td scope="row">' . $num . '</td>
         <td>' . $name . '</td>
         <td>' . $email . '</td>
         <td>@' . $phone . '</td>
         <td>@' . $city . '</td>
         <td>
-    <button class="btn btn-dark">Update</button>
-    <button class="btn btn-danger">Delete</button>
+    <button onclick="getUser('.$id.')" class="btn btn-dark">Update</button>
+    <button onclick="deleteUser('.$id.')" class="btn btn-danger">Delete</button>
 </td>
       </tr>';
+      $num++;
     }
     $table .= '</table>';
     echo $table;

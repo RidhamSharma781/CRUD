@@ -29,16 +29,51 @@
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email address</label>
-                        <input type="email" class="form-control" id="email" >
+                        <input type="email" class="form-control" id="email">
                     </div>
                     <div class="mb-3">
                         <label for="phone" class="form-label">Mobile no.</label>
-                        <input type="text" class="form-control" id="phone" >
+                        <input type="text" class="form-control" id="phone">
                     </div>
                     <div class="mb-3">
                         <label for="city" class="form-label">City</label>
-                        <input type="text" class="form-control" id="city" >
+                        <input type="text" class="form-control" id="city">
                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="addUser()" class="btn btn-dark">Submit</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upate Modal -->
+    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">New User</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="updatename" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="updatename">
+                    </div>
+                    <div class="mb-3">
+                        <label for="updateemail" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="updateemail">
+                    </div>
+                    <div class="mb-3">
+                        <label for="updatephone" class="form-label">Mobile no.</label>
+                        <input type="text" class="form-control" id="updatephone">
+                    </div>
+                    <div class="mb-3">
+                        <label for="updatecity" class="form-label">City</label>
+                        <input type="text" class="form-control" id="updatecity">
+                    </div>
+                    <input type="hidden" id="hiddenData" >
                 </div>
                 <div class="modal-footer">
                     <button type="button" onclick="addUser()" class="btn btn-dark">Submit</button>
@@ -58,9 +93,9 @@
     <div class="container">
         <div class="displayTable" id="displayTable">
 
+        </div>
     </div>
-    </div>
-    
+
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -69,45 +104,81 @@
 
     <script>
 
-        $(Document).ready(()=>{
+        // To display data everytime.
+
+        $(Document).ready(() => {
             displayData();
         })
 
+        // Function to delete a user
 
-        function displayData(){
-            var display = 'true';
+        function deleteUser(id){
             $.ajax({
-                url:'display.php',
+                url:'delete.php',
                 type:'post',
                 data:{
-                    displaySend:display
+                    deleteSend:id
                 },
                 success:function(data,status){
+                    displayData();
+                }
+            })
+        }
+
+        // Function to display data
+        function displayData() {
+            var display = 'true';
+            $.ajax({
+                url: 'display.php',
+                type: 'post',
+                data: {
+                    displaySend: display
+                },
+                success: function (data, status) {
                     $('#displayTable').html(data);
                 }
             });
         }
-        function addUser(){
+
+        // Funtion to add a new user
+        function addUser() {
             var name = $('#name').val();
             var email = $('#email').val();
             var phone = $('#phone').val();
             var city = $('#city').val();
 
             $.ajax({
-                url:'insert.php',
-                type:'post',
-                data:{
-                    nameSend:name,
-                    emailSend:email,
-                    phoneSend:phone,
-                    citySend:city
+                url: 'insert.php',
+                type: 'post',
+                data: {
+                    nameSend: name,
+                    emailSend: email,
+                    phoneSend: phone,
+                    citySend: city
                 },
-                success:function(data,status){
+                success: function (data, status) {
                     // console.log("Success!");
                     displayData();
                 }
             })
+        }
 
+        // Function to get user data for updation
+        function getUser(id){
+
+            $('#hiddenData').val(id);
+
+            // To show the Modal on clicking Update button
+            $('#updateModal').modal("show");
+
+            // Post request for updating data
+            $.post("update.php",{updateSend:id},function(data,success){
+                var userId =JSON.parse(data);
+                $('#updatename').val(userId.name);
+                $('#updateemail').val(userId.email);
+                $('#updatephone').val(userId.phone);
+                $('#updatecity').val(userId.city);
+            });
 
         }
     </script>
